@@ -56,8 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
     loadYesAudio();
     try {
       await audio.play();
+      return true;
     } catch (err) {
       // Ignore play errors to avoid blocking the page.
+      return false;
     }
   }
 
@@ -66,19 +68,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const tryStart = async function () {
       if (started) return;
-      started = true;
-      removeListeners();
-      await startYesAudio();
+      const ok = await startYesAudio();
+      if (ok) {
+        started = true;
+        removeListeners();
+      }
     };
 
     const removeListeners = function () {
       document.removeEventListener("click", tryStart);
       document.removeEventListener("touchstart", tryStart);
+      document.removeEventListener("pointerdown", tryStart);
       document.removeEventListener("keydown", tryStart);
     };
 
     document.addEventListener("click", tryStart);
     document.addEventListener("touchstart", tryStart, { passive: true });
+    document.addEventListener("pointerdown", tryStart);
     document.addEventListener("keydown", tryStart);
 
     startYesAudio().catch(function () {});
