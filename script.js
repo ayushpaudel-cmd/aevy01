@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let yesAudio = null;
   let yesAudioLoaded = false;
-  const yesAudioSrc = "./maya01.mp3";
+  const yesAudioSrc = "./audio/maya01.mp3";
 
   function getYesAudio() {
     if (yesAudio) return yesAudio;
@@ -80,12 +80,24 @@ document.addEventListener("DOMContentLoaded", function () {
       document.removeEventListener("touchstart", tryStart);
       document.removeEventListener("pointerdown", tryStart);
       document.removeEventListener("keydown", tryStart);
+
+      const heart = document.getElementById("start-audio");
+      if (heart) {
+        heart.removeEventListener("click", tryStart);
+        heart.removeEventListener("touchstart", tryStart);
+      }
     };
 
     document.addEventListener("click", tryStart);
     document.addEventListener("touchstart", tryStart, { passive: true });
     document.addEventListener("pointerdown", tryStart);
     document.addEventListener("keydown", tryStart);
+
+    const heart = document.getElementById("start-audio");
+    if (heart) {
+      heart.addEventListener("click", tryStart);
+      heart.addEventListener("touchstart", tryStart, { passive: true });
+    }
 
     startYesAudio().catch(function () {});
   }
